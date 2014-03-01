@@ -1,0 +1,134 @@
+{% load i18n %}
+{% load anonsurvey_extras %}
+
+<div>
+{% if survey %}
+    <h3>{{ survey.title }}</h3>
+    <p>{{ survey.intro|safe }}</p>
+    {% if error_messages %}
+        <p>
+            <ul>
+            {% for err in error_messages %}
+                <li><strong>{{ err }}</strong></li>
+            {% endfor %}
+            </ul>
+        </p>
+    {% endif %}
+    <form action="{% url 'survey_complete' survey.id %}" method="post">
+    {% csrf_token%}
+    <ol>
+    {% for qg in survey.question_or_group %}
+        {% if qg.0 %}
+            <li>{{ qg.0.text }}<br><ol>
+        {% endif %}
+        {% for q in qg.1 %}
+            <li>
+                {% if q.requires_answer %}<strong>*</strong>{% endif %} {{ q.text }}<br>
+                <ul>
+                {% for a in q.offeredanswer_set.all %}
+                    <li>
+                        {% if q.question_type == 'I' %}
+                            {{ a.prefix }} <input type="text" name="q{{ q.id }}" id="q{{ q.id }}{{ forloop.counter }}" 
+                                                {% with value=last_post|dictget:q.id %}
+                                                    {% if value %}
+                                                        value="{{ value.0 }}" 
+                                                    {% elif a.default %}
+                                                        value="{{ a.default }}" 
+                                                    {% endif %}
+                                                {% endwith %}
+                                           /> {{ a.sufix }} {% if a.validation_format %}(format: {{ a.validation_format }}){% endif %}
+                        {% elif q.question_type == 'R' %}
+                            <input type="radio" name="q{{ q.id }}" id="q{{ q.id }}{{ forloop.counter }}" value="{{ a.id }}" 
+                                {% with value=last_post|dictget:q.id %}
+                                    {% if value %}
+                                        {% if value.0|add:"0" == a.id %}
+                                            checked="checked"
+                                        {% endif %}
+                                    {% elif a.default %}
+                                        checked="checked"
+                                    {% endif %}
+                                {% endwith %}
+                            /> {{ a.text }}
+                        {% elif q.question_type == 'C' %}
+                            <input type="checkbox" name="q{{ q.id }}" id="q{{ q.id }}{{ forloop.counter }}" value="{{ a.id }}" 
+                                {% with value=last_post|dictget:q.id %}
+                                    {% if value %}
+                                        {% if value.0|add:"0" == a.id %}
+                                            checked="checked"
+                                        {% endif %}
+                                    {% elif a.default %}
+                                        checked="checked"
+                                    {% endif %}
+                                {% endwith %}
+                            /> {{ a.text }}
+                        {% elif q.question_type == 'RI' %}
+                            <input type="radio" name="q{{ q.id }}" id="q{{ q.id }}{{ forloop.counter }}" value="{{ a.id }}" 
+                                {% with value=last_post|dictget:q.id %}
+                                    {% if value %}
+                                        {% if value.0|add:"0" == a.id %}
+                                            checked="checked"
+                                        {% endif %}
+                                    {% elif a.default %}
+                                        checked="checked"
+                                    {% endif %}
+                                {% endwith %}
+                            />
+                            {% if a.answer_type == 'I' %}
+                                {{ a.prefix }} <input type="text" name="q{{ q.id }}_value" id="q{{ q.id }}{{ forloop.counter }}_value" 
+                                                {% with key=q.id|add:"_value" %}
+                                                    {% with value=last_post|dictget:key %}
+                                                        {% if value %}
+                                                            value="{{ value.0 }}" 
+                                                        {% elif a.default %}
+                                                            value="{{ a.default }}" 
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% endwith %}
+                                               /> {{ a.sufix }} {% if a.validation_format %}(format: {{ a.validation_format }}){% endif %}
+                            {% else %}
+                                {{ a.text }}
+                            {% endif %}
+                        {% elif q.question_type == 'CI' %}
+                            <input type="checkbox" name="q{{ q.id }}" id="q{{ q.id }}{{ forloop.counter }}" value="{{ a.id }}" 
+                                {% with value=last_post|dictget:q.id %}
+                                    {% if value %}
+                                        {% if a.id|asstr in value %}
+                                            checked="checked"
+                                        {% endif %}
+                                    {% elif a.default %}
+                                        checked="checked"
+                                    {% endif %}
+                                {% endwith %}
+                            />
+                            {% if a.answer_type == 'I' %}
+                                {% with key=q.id|add:"_value" %}
+                                    {% with value=last_post|dictget:key %}
+                                        {{ a.prefix }} <input type="text" name="q{{ q.id }}_value" id="q{{ q.id }}{{ forloop.counter }}_value" 
+                                                        {% if value %}
+                                                            value="{{ value.0 }}" 
+                                                        {% elif a.default %}
+                                                            value="{{ a.default }}" 
+                                                        {% endif %}
+                                               /> {{ a.sufix }} {% if a.validation_format %}(format: {{ a.validation_format }}){% endif %}
+                                    {% endwith %}
+                                {% endwith %}
+                            {% else %}
+                                {{ a.text }}
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        {% if qg.0 %}
+            </li></ol>
+        {% endif %}
+    {% endfor %}
+    </ol>
+    <input type="submit" name="submit" value="{% trans 'Send' %}"/>
+    </form>
+{% else %}
+    {% trans 'No survey' %}
+{% endif %}
+</div>

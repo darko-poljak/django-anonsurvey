@@ -1,0 +1,14 @@
+{% extends "anonsurvey/survey_base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% if surveys %}
+        <ul>
+        {% for s in surveys %}
+            <li><a href="{% url 'survey' s.name %}">{{ s.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        {% trans 'No surveys' %}
+    {% endif %}
+{% endblock %}

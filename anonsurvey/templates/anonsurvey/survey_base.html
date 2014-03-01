@@ -1,0 +1,13 @@
+{% load i18n %}
+<html>
+<head>
+    <title>{% block title %}{% trans 'Surveys' %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block breadcrumbs %}
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+    {% block pagination %}{% endblock %}
+</body>

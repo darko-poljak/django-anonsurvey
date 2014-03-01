@@ -1,0 +1,6 @@
+{% extends "anonsurvey/survey_base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% include "anonsurvey/survey_form.html" with survey=survey %}
+{% endblock %}
