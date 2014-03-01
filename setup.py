@@ -11,7 +11,7 @@ setup(
     version='0.1',
     packages=['anonsurvey'],
     include_package_data=True,
-    license='GPLv3',  # example license
+    license='GPLv3',
     description='A Django app to create Web-based anonymous surveys',
     long_description=README,
     install_requires=["django-tinymce", "Django-tinymce-filebrowser"],
@@ -22,7 +22,7 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GPLv3', # example license
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
