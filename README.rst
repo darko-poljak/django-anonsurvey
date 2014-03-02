@@ -70,7 +70,8 @@ Answer data are:
     * text - displayed for choice type of answer
     * text sufix - displayed after input field of input type answer
     * default value - for input type of answer
-    * validation refex - for input type of answer
+    * validation regex - for input type of answer; regex is a valid
+      python regex
     * sort index - answers are sorted by this number ascending.
 
 Depending on survey definition survey questions and offered answers are
