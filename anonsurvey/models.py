@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 from tinymce.models import HTMLField
 from django.utils.translation import ugettext_lazy as _
@@ -121,8 +122,10 @@ class OfferedAnswer(models.Model):
                                              verbose_name=_('Sort By Asc'))
 
     def __unicode__(self):
-        return '{}: {}: {}: {}'.format(self.answer_type, self.prefix,
-                                       self.text, self.sufix)
+        return '{}: {}: {}: {}'.format(self.answer_type,
+                                       self.prefix,
+                                       self.text,
+                                       self.sufix)
 
     def clean(self):
         validate_question_answers(self.question, self)
@@ -142,4 +145,6 @@ class Answer(models.Model):
     text = models.CharField(max_length=256, verbose_name=_('Entered Text'))
 
     def __unicode__(self):
-        return '{}: {}: {}'.format(self.client_id, self.answer, self.text)
+        return '{}: {}: {}'.format(self.client_id,
+                                   self.answer,
+                                   self.text)
