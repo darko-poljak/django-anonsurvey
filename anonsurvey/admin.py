@@ -4,6 +4,7 @@ from anonsurvey.models import Survey, QuestionGroup, Question,\
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from mce_filebrowser.admin import MCEFilebrowserAdmin
 
 
 class QuestionInline(admin.StackedInline):
@@ -11,7 +12,7 @@ class QuestionInline(admin.StackedInline):
     extra = 1
 
 
-class SurveyAdmin(admin.ModelAdmin):
+class SurveyAdmin(MCEFilebrowserAdmin):
     prepopulated_fields = {'name': ('title',)}
     fields = ('title', 'name', 'intro', 'active')
     list_display = ('name', 'title', 'active')
